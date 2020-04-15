@@ -90,6 +90,15 @@ class _LoginPageState extends State<LoginPage> {
                                       return "Senha inválida!";
                                     return null;
                                   },
+                                  onEditingComplete: () {
+                                    if (_formKey.currentState.validate()) {
+                                      model.signIn(
+                                          email: _emailController.text,
+                                          pass: _passController.text,
+                                          onSuccess: _onSuccess,
+                                          onFail: _onFail);
+                                    }
+                                  },
                                 ),
                                 Align(
                                   alignment: Alignment.centerRight,

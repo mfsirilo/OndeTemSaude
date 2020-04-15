@@ -3,6 +3,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:onde_tem_saude_app/models/user_model.dart';
 import 'package:onde_tem_saude_app/routes/routes.dart';
 import 'package:onde_tem_saude_app/ui/general/login_page.dart';
+import 'package:onde_tem_saude_app/ui/tabs/home_tab.dart';
 import 'package:onde_tem_saude_app/ui/tiles/drawer_tile.dart';
 import 'package:scoped_model/scoped_model.dart';
 
@@ -53,7 +54,7 @@ class CustomDrawer extends StatelessWidget {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
                                 Text(
-                                  "Olá," +
+                                  "Olá, " +
                                       (!model.isLoggedIn()
                                           ? ""
                                           : model.userData["name"]),
@@ -93,8 +94,17 @@ class CustomDrawer extends StatelessWidget {
               Divider(
                 color: Theme.of(context).primaryColor,
               ),
-              DrawerTile(Icons.assistant, "Início", MenuPages.home,
-                  route == Routes.home, 22.0),
+              DrawerTile(
+                  Icons.assistant,
+                  "Início",
+                  UserModel.of(context).isLoggedIn()
+                      ? HomeTab(
+                          userDistrict:
+                              UserModel.of(context).userData["district"],
+                        )
+                      : MenuPages.home,
+                  route == Routes.home,
+                  22.0),
               //DrawerTile(FontAwesomeIcons.fileSignature, "Sobre",
               //    MenuPages.aboutUs, route == Routes.aboutUs, 22.0),
               DrawerTile(Icons.message, "Fale Conosco", MenuPages.contactUs,

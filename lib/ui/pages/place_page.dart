@@ -20,6 +20,10 @@ class _PlacePageState extends State<PlacePage> {
   final DocumentSnapshot place;
   _PlacePageState(this.place);
 
+  bool hasService = true;
+  bool hasDistrict = true;
+  bool hasSpecialty = true;
+
   @override
   Widget build(BuildContext context) {
     final Color primaryColor = Theme.of(context).primaryColor;
@@ -218,9 +222,17 @@ class _PlacePageState extends State<PlacePage> {
                           minWidth: 0,
                           height: 40,
                           onPressed: () {
-                            launch(
-                                "https://www.google.com/maps/search/?api=1&query=${place["latitude"]},"
-                                "${place["longitude"]}");
+                            String url = "";
+                            if (place["latitude"] == 0 ||
+                                place["longitude"] == 0)
+                              url =
+                                  "https://www.google.com/maps/search/?api=1&query=${place["address"]}, Rio Verde, Goiás, Brasil";
+                            else
+                              url =
+                                  "https://www.google.com/maps/search/?api=1&query=${place["latitude"]},"
+                                  "${place["longitude"]}";
+
+                            launch(url);
                           },
                         ),
                       ],
@@ -296,75 +308,145 @@ class _PlacePageState extends State<PlacePage> {
                     SizedBox(
                       height: 8.0,
                     ),
-                    Divider(),
-                    SizedBox(
-                      height: 8.0,
-                    ),
-                    Text("ESPECIALIDADES: ",
-                        style: TextStyle(
-                          fontSize: 16.0,
-                          fontWeight: FontWeight.bold,
-                        )),
-                    FutureBuilder<QuerySnapshot>(
-                        future: place.reference
-                            .collection("specialties")
-                            .getDocuments(),
-                        builder: (context, snapshot) {
-                          if (!snapshot.hasData)
-                            return LoadingWidget();
-                          else if (snapshot.data.documents.length == 0)
-                            return NoRecordWidget();
-                          else {
-                            List<String> list = snapshot.data.documents
-                                .map((DocumentSnapshot docSnapshot) {
-                              return docSnapshot.data["uid"].toString();
-                            }).toList();
-
-                            return Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Column(
-                                children:
-                                    listItemsToWidget(list, "specialties"),
+                    hasSpecialty
+                        ? Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Divider(),
+                              SizedBox(
+                                height: 8.0,
                               ),
-                            );
-                          }
-                        }),
-                    SizedBox(
-                      height: 8.0,
-                    ),
-                    Divider(),
-                    SizedBox(
-                      height: 8.0,
-                    ),
-                    Text("SERVIÇOS: ",
-                        style: TextStyle(
-                          fontSize: 16.0,
-                          fontWeight: FontWeight.bold,
-                        )),
-                    FutureBuilder<QuerySnapshot>(
-                        future: place.reference
-                            .collection("services")
-                            .getDocuments(),
-                        builder: (context, snapshot) {
-                          if (!snapshot.hasData)
-                            return LoadingWidget();
-                          else if (snapshot.data.documents.length == 0)
-                            return NoRecordWidget();
-                          else {
-                            List<String> list = snapshot.data.documents
-                                .map((DocumentSnapshot docSnapshot) {
-                              return docSnapshot.data["uid"].toString();
-                            }).toList();
+                              Text("ESPECIALIDADES: ",
+                                  style: TextStyle(
+                                    fontSize: 16.0,
+                                    fontWeight: FontWeight.bold,
+                                  )),
+                              FutureBuilder<QuerySnapshot>(
+                                  future: place.reference
+                                      .collection("specialties")
+                                      .getDocuments(),
+                                  builder: (context, snapshot) {
+                                    if (!snapshot.hasData)
+                                      return LoadingWidget();
+                                    else if (snapshot.data.documents.length ==
+                                        0) {
+                                      hasSpecialty = false;
+                                      return NoRecordWidget();
+                                    } else {
+                                      List<String> list = snapshot
+                                          .data.documents
+                                          .map((DocumentSnapshot docSnapshot) {
+                                        return docSnapshot.data["uid"]
+                                            .toString();
+                                      }).toList();
 
-                            return Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: listItemsToWidget(list, "services"),
+                                      return Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Column(
+                                          children: listItemsToWidget(
+                                              list, "specialties"),
+                                        ),
+                                      );
+                                    }
+                                  })
+                            ],
+                          )
+                        : Container(),
+                    SizedBox(
+                      height: 8.0,
+                    ),
+                    hasService
+                        ? Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Divider(),
+                              SizedBox(
+                                height: 8.0,
                               ),
-                            );
-                          }
-                        }),
+                              Text("SERVIÇOS: ",
+                                  style: TextStyle(
+                                    fontSize: 16.0,
+                                    fontWeight: FontWeight.bold,
+                                  )),
+                              FutureBuilder<QuerySnapshot>(
+                                  future: place.reference
+                                      .collection("services")
+                                      .getDocuments(),
+                                  builder: (context, snapshot) {
+                                    if (!snapshot.hasData)
+                                      return LoadingWidget();
+                                    else if (snapshot.data.documents.length ==
+                                        0) {
+                                      hasService = false;
+                                      return NoRecordWidget();
+                                    } else {
+                                      List<String> list = snapshot
+                                          .data.documents
+                                          .map((DocumentSnapshot docSnapshot) {
+                                        return docSnapshot.data["uid"]
+                                            .toString();
+                                      }).toList();
+
+                                      return Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: listItemsToWidget(
+                                              list, "services"),
+                                        ),
+                                      );
+                                    }
+                                  })
+                            ],
+                          )
+                        : Container(),
+                    hasDistrict
+                        ? Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Divider(),
+                              SizedBox(
+                                height: 8.0,
+                              ),
+                              Text("BAIRROS ATENDIDOS: ",
+                                  style: TextStyle(
+                                    fontSize: 16.0,
+                                    fontWeight: FontWeight.bold,
+                                  )),
+                              FutureBuilder<QuerySnapshot>(
+                                  future: place.reference
+                                      .collection("districts")
+                                      .getDocuments(),
+                                  builder: (context, snapshot) {
+                                    if (!snapshot.hasData)
+                                      return LoadingWidget();
+                                    else if (snapshot.data.documents.length ==
+                                        0) {
+                                      hasDistrict = false;
+                                      return NoRecordWidget();
+                                    } else {
+                                      List<String> list = snapshot
+                                          .data.documents
+                                          .map((DocumentSnapshot docSnapshot) {
+                                        return docSnapshot.data["uid"]
+                                            .toString();
+                                      }).toList();
+
+                                      return Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: listItemsToWidgetDistrict(
+                                              list, "districts"),
+                                        ),
+                                      );
+                                    }
+                                  }),
+                            ],
+                          )
+                        : Container(),
                   ],
                 ),
               ),
@@ -401,6 +483,42 @@ class _PlacePageState extends State<PlacePage> {
     listItems
         .forEach((element) => listWidget.add(FutureBuilder<DocumentSnapshot>(
               future: Firestore.instance
+                  .collection(collection)
+                  .document(element)
+                  .get(),
+              builder: (context, snapshot) {
+                if (!snapshot.hasData)
+                  return Center(
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: CircularProgressIndicator(),
+                    ),
+                  );
+                else {
+                  return Padding(
+                    padding: const EdgeInsets.only(top: 4.0),
+                    child: Text(
+                      snapshot.data["name"],
+                      style: TextStyle(
+                        fontSize: 16.0,
+                      ),
+                    ),
+                  );
+                }
+              },
+            )));
+
+    return listWidget;
+  }
+
+  List<Widget> listItemsToWidgetDistrict(
+      List<String> listItems, String collection) {
+    List<Widget> listWidget = [];
+    listItems
+        .forEach((element) => listWidget.add(FutureBuilder<DocumentSnapshot>(
+              future: Firestore.instance
+                  .collection("cities")
+                  .document(widget.place.data["city"])
                   .collection(collection)
                   .document(element)
                   .get(),

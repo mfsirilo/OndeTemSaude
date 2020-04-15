@@ -1,25 +1,31 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_custom_clippers/flutter_custom_clippers.dart';
-import 'package:flutter_swiper/flutter_swiper.dart';
-import 'package:onde_tem_saude_app/models/user_model.dart';
-import 'package:onde_tem_saude_app/ui/tiles/place_tile.dart';
 import 'package:onde_tem_saude_app/ui/tiles/place_tile2.dart';
 import 'package:onde_tem_saude_app/ui/widgets/custom_drawer.dart';
-import 'package:scoped_model/scoped_model.dart';
+import 'package:onde_tem_saude_app/ui/widgets/loading_widget.dart';
+import 'package:onde_tem_saude_app/ui/widgets/no_record_widget.dart';
 
 class HomeTab extends StatefulWidget {
   static const String routeName = '/home';
+  final String userDistrict;
 
-  HomeTab();
+  HomeTab({this.userDistrict});
 
   @override
-  _HomeTabState createState() => _HomeTabState();
+  _HomeTabState createState() => _HomeTabState(userDistrict);
 }
 
 class _HomeTabState extends State<HomeTab> {
-  bool showList = true;
+  bool selectedUserDistrict = true;
+  bool showList = false;
+  bool showListAll = true;
+  bool showListAllButton = true;
+  String selectedCity = "0EvkbABbbt4sk1rQOkT1";
+  final String userDistrict;
+  String selectedDistrict, selectedSpecialty;
+
+  _HomeTabState(this.userDistrict);
 
   @override
   void initState() {
@@ -28,6 +34,9 @@ class _HomeTabState extends State<HomeTab> {
 
   @override
   Widget build(BuildContext context) {
+    if (selectedUserDistrict) selectedDistrict = widget.userDistrict;
+    if (selectedDistrict != null) showListAll = false;
+
     return Scaffold(
       appBar: AppBar(
         title: Text("Onde tem Saúde"),
@@ -35,186 +44,461 @@ class _HomeTabState extends State<HomeTab> {
         centerTitle: true,
         elevation: 0,
         actions: <Widget>[
-          IconButton(
-            icon: Icon(
-              showList ? Icons.grid_on : Icons.grid_off,
-              color: Colors.white,
-            ),
-            onPressed: () {
-              setState(() {
-                showList = !showList;
-              });
-            },
-          )
+          showListAllButton
+              ? Container()
+              : IconButton(
+                  icon: Icon(
+                    showListAll ? Icons.grid_on : Icons.grid_off,
+                    color: Colors.white,
+                  ),
+                  onPressed: () {
+                    setState(() {
+                      showListAll = !showListAll;
+                    });
+                  },
+                )
         ],
       ),
       drawer: CustomDrawer(HomeTab.routeName),
       backgroundColor: Colors.white,
-      body: SafeArea(child:
-          ScopedModelDescendant<UserModel>(builder: (context, child, model) {
-        return Stack(
-          children: <Widget>[
-            ClipPath(
-              clipper: DiagonalPathClipperTwo(),
-              child: Container(
-                height: 130,
-                color: Theme.of(context).primaryColor,
-              ),
-            ),
-            Column(
-              children: <Widget>[
-                model.isLoggedIn() && showList
-                    ? Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Padding(
-                            padding: const EdgeInsets.only(
-                                left: 8.0, right: 8.0, bottom: 4.0),
-                            child: Text(
-                              "UNIDADES DE SAÚDE PARA O SEU BAIRRO:",
-                              style: TextStyle(
-                                  fontSize: 16.0,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white),
-                            ),
-                          ),
-                          Padding(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 8.0),
-                            child: FutureBuilder<DocumentSnapshot>(
-                              future: Firestore.instance
-                                  .collection("cities")
-                                  .document(model.userData['city'])
-                                  .collection("districts")
-                                  .document(model.userData['district'])
-                                  .get(),
-                              builder: (context, snapshot) {
-                                if (!snapshot.hasData)
-                                  return Center(
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: CircularProgressIndicator(
-                                        backgroundColor: Colors.white,
+      body: SafeArea(
+          child: Stack(
+        children: <Widget>[
+          Column(
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.only(
+                  left: 12.0,
+                  right: 12.0,
+                  top: 10.0,
+                ),
+                child: Row(
+                  children: <Widget>[
+                    Container(
+                      width: 100,
+                      child: Text(
+                        "Bairros:",
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                    StreamBuilder<QuerySnapshot>(
+                        stream: Firestore.instance
+                            .collection("cities")
+                            .document(selectedCity)
+                            .collection("districts")
+                            .where("active", isEqualTo: true)
+                            .snapshots(),
+                        builder: (context, snapshot) {
+                          if (!snapshot.hasData)
+                            return const Text("Carregando...");
+                          else {
+                            List<DropdownMenuItem> currencyItems = [];
+                            for (int i = 0;
+                                i < snapshot.data.documents.length;
+                                i++) {
+                              DocumentSnapshot snap =
+                                  snapshot.data.documents[i];
+                              currencyItems.add(
+                                DropdownMenuItem(
+                                  child: Padding(
+                                    padding:
+                                        EdgeInsets.only(left: 8.0, right: 8.0),
+                                    child: Text(
+                                      snap["name"],
+                                      style: TextStyle(
+                                          color:
+                                              Theme.of(context).primaryColor),
+                                    ),
+                                  ),
+                                  value: "${snap.documentID}",
+                                ),
+                              );
+                            }
+                            return Expanded(
+                              child: Padding(
+                                padding: const EdgeInsets.only(
+                                    left: 6.0, right: 6.0),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: <Widget>[
+                                    DropdownButton(
+                                      items: currencyItems,
+                                      onChanged: (currencyValue) {
+                                        setState(() {
+                                          showListAllButton = false;
+                                          showListAll = false;
+                                          selectedDistrict = currencyValue;
+                                          selectedUserDistrict = false;
+                                        });
+                                      },
+                                      value: selectedDistrict,
+                                      isExpanded: true,
+                                      hint: Text(
+                                        "  selecione...",
+                                        style: TextStyle(
+                                            color:
+                                                Theme.of(context).primaryColor),
                                       ),
                                     ),
-                                  );
-                                else {
-                                  return Text(
-                                    "${snapshot.data["name"]}",
-                                    style: TextStyle(
-                                        fontSize: 16.0,
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.white),
-                                  );
-                                }
-                              },
+                                  ],
+                                ),
+                              ),
+                            );
+                          }
+                        }),
+                    selectedDistrict != null
+                        ? IconButton(
+                            icon: Icon(Icons.close),
+                            onPressed: () {
+                              setState(() {
+                                selectedDistrict = null;
+                                selectedUserDistrict = false;
+                              });
+                            },
+                          )
+                        : Container()
+                  ],
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                child: Row(
+                  children: <Widget>[
+                    Container(
+                      width: 100,
+                      child: Text(
+                        "Especialidades:",
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                    StreamBuilder<QuerySnapshot>(
+                        stream: Firestore.instance
+                            .collection("specialties")
+                            .snapshots(),
+                        builder: (context, snapshot) {
+                          if (!snapshot.hasData)
+                            return const Text("Carregando...");
+                          else {
+                            List<DropdownMenuItem> currencyItems = [];
+                            for (int i = 0;
+                                i < snapshot.data.documents.length;
+                                i++) {
+                              DocumentSnapshot snap =
+                                  snapshot.data.documents[i];
+                              currencyItems.add(
+                                DropdownMenuItem(
+                                  child: Padding(
+                                    padding:
+                                        EdgeInsets.only(left: 8.0, right: 8.0),
+                                    child: Text(
+                                      snap["name"],
+                                      style: TextStyle(
+                                          color:
+                                              Theme.of(context).primaryColor),
+                                    ),
+                                  ),
+                                  value: "${snap.documentID}",
+                                ),
+                              );
+                            }
+                            return Expanded(
+                              child: Padding(
+                                padding: const EdgeInsets.only(
+                                    left: 6.0, right: 6.0),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: <Widget>[
+                                    DropdownButton(
+                                      items: currencyItems,
+                                      onChanged: (currencyValue) {
+                                        setState(() {
+                                          showListAllButton = false;
+                                          showListAll = false;
+                                          selectedSpecialty = currencyValue;
+                                        });
+                                      },
+                                      value: selectedSpecialty,
+                                      isExpanded: true,
+                                      hint: Text(
+                                        "  selecione...",
+                                        style: TextStyle(
+                                            color:
+                                                Theme.of(context).primaryColor),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            );
+                          }
+                        }),
+                    selectedSpecialty != null
+                        ? IconButton(
+                            icon: Icon(Icons.close),
+                            onPressed: () {
+                              setState(() {
+                                selectedSpecialty = null;
+                              });
+                            },
+                          )
+                        : Container()
+                  ],
+                ),
+              ),
+              Divider(),
+              showListAll ||
+                      (selectedDistrict == null && selectedSpecialty == null)
+                  ? Expanded(
+                      child: Column(
+                        children: <Widget>[
+                          Padding(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 12, vertical: 12),
+                            child: Text(
+                              "TODAS AS UNIDADES DE SAÚDE",
+                              style: TextStyle(
+                                  fontSize: 20.0,
+                                  fontWeight: FontWeight.bold,
+                                  color: Theme.of(context).primaryColor),
                             ),
                           ),
-                          Padding(
-                            padding: const EdgeInsets.only(
-                                left: 8.0, right: 8.0, bottom: 20.0),
-                            child: FutureBuilder<QuerySnapshot>(
+                          Expanded(
+                            child: Padding(
+                              padding: const EdgeInsets.all(4.0),
+                              child: FutureBuilder<QuerySnapshot>(
                                 future: Firestore.instance
                                     .collection("stores")
-                                    .where("district",
-                                        isEqualTo: model.userData['district'])
                                     .getDocuments(),
                                 builder: (context, snapshot) {
                                   if (!snapshot.hasData)
-                                    return Center(
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: CircularProgressIndicator(
-                                          backgroundColor: Colors.white,
-                                        ),
-                                      ),
-                                    );
+                                    return LoadingWidget();
                                   else if (snapshot.data.documents.length == 0)
-                                    return Container(
-                                      padding: EdgeInsets.only(
-                                          top: 16.0, bottom: 32.0),
-                                      child: Column(
-                                        children: <Widget>[
-                                          Text(
-                                              "NENHUMA UNIDADE DE SAÚDE ENCONTRADA...",
-                                              style: TextStyle(
-                                                  fontSize: 16.0,
-                                                  fontWeight: FontWeight.bold,
-                                                  color: Colors.white)),
-                                        ],
-                                      ),
+                                    return NoRecordWidget();
+                                  else {
+                                    return ListView(
+                                      children: snapshot.data.documents
+                                          .map((doc) => PlaceTile2(doc))
+                                          .toList(),
                                     );
-                                  else if (snapshot.data.documents.length == 1)
-                                    return PlaceTile(
-                                        snapshot.data.documents[0]);
-                                  else
-                                    return Container(
-                                      height: 220.0,
-                                      child: Swiper(
-                                        autoplay: true,
-                                        autoplayDelay: 5000,
-                                        duration: 2000,
-                                        itemBuilder:
-                                            (BuildContext context, int index) {
-                                          return new PlaceTile(
-                                              snapshot.data.documents[index]);
-                                        },
-                                        itemCount:
-                                            snapshot.data.documents.length,
-                                        pagination: new SwiperPagination(),
-                                      ),
-                                    );
-                                }),
-                          ),
-                          Divider(
-                            color: model.isLoggedIn()
-                                ? Theme.of(context).primaryColor
-                                : Colors.white,
+                                  }
+                                },
+                              ),
+                            ),
                           ),
                         ],
-                      )
-                    : Container(),
-                Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                  child: Text(
-                    "LISTA DE UNIDADES DE SAÚDE",
-                    style: TextStyle(
-                        fontSize: 16.0,
-                        fontWeight: FontWeight.bold,
-                        color: model.isLoggedIn() && showList
-                            ? Theme.of(context).primaryColor
-                            : Colors.white),
-                  ),
-                ),
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.all(4.0),
-                    child: FutureBuilder<QuerySnapshot>(
-                      future: Firestore.instance
-                          .collection("stores")
-                          .getDocuments(),
-                      builder: (context, snapshot) {
-                        if (!snapshot.hasData)
-                          return Center(
-                            child: CircularProgressIndicator(),
-                          );
-                        else {
-                          return ListView(
-                            children: snapshot.data.documents
-                                .map((doc) => PlaceTile2(doc))
-                                .toList(),
-                          );
-                        }
-                      },
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ],
-        );
-      })),
+                      ),
+                    )
+                  : selectedDistrict != null
+                      ? Expanded(
+                          child: Column(
+                            children: <Widget>[
+                              Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 12, vertical: 12),
+                                child: Text(
+                                  "LISTA DE UNIDADES DE SAÚDE ENCONTRADAS",
+                                  style: TextStyle(
+                                      fontSize: 16.0,
+                                      fontWeight: FontWeight.bold,
+                                      color: Theme.of(context).primaryColor),
+                                ),
+                              ),
+                              selectedSpecialty == null
+                                  ? Expanded(
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(4.0),
+                                        child: FutureBuilder<QuerySnapshot>(
+                                          future: Firestore.instance
+                                              .collection("store_district")
+                                              .where("district",
+                                                  isEqualTo: selectedDistrict)
+                                              .getDocuments(),
+                                          builder: (context, snapshot) {
+                                            if (!snapshot.hasData)
+                                              return LoadingWidget();
+                                            else if (snapshot
+                                                    .data.documents.length ==
+                                                0)
+                                              return NoRecordWidget();
+                                            else {
+                                              return ListView(
+                                                  children: snapshot
+                                                      .data.documents
+                                                      .map((doc) => FutureBuilder<
+                                                              DocumentSnapshot>(
+                                                          future: Firestore
+                                                              .instance
+                                                              .collection(
+                                                                  "stores")
+                                                              .document(
+                                                                  doc.data[
+                                                                      "store"])
+                                                              .get(),
+                                                          builder:
+                                                              (context, snap) {
+                                                            if (!snap.hasData)
+                                                              return LoadingWidget();
+                                                            else {
+                                                              if (snap.data
+                                                                      .data ==
+                                                                  null)
+                                                                return Container();
+                                                              else
+                                                                return PlaceTile2(
+                                                                    snap.data);
+                                                            }
+                                                          }))
+                                                      .toList());
+                                            }
+                                          },
+                                        ),
+                                      ),
+                                    )
+                                  : Expanded(
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(4.0),
+                                        child: FutureBuilder<QuerySnapshot>(
+                                          future: Firestore.instance
+                                              .collection("store_district")
+                                              .where("district",
+                                                  isEqualTo: selectedDistrict)
+                                              .getDocuments(),
+                                          builder: (context, snapshot) {
+                                            List<String> storesID = [];
+
+                                            for (DocumentSnapshot doc
+                                                in snapshot.data.documents) {
+                                              storesID.add(doc.data["store"]);
+                                            }
+                                            if (storesID.isEmpty)
+                                              return NoRecordWidget();
+
+                                            return FutureBuilder<QuerySnapshot>(
+                                                future: Firestore.instance
+                                                    .collection(
+                                                        "store_specialty")
+                                                    .where("specialty",
+                                                        isEqualTo:
+                                                            selectedSpecialty)
+                                                    .where("store",
+                                                        whereIn: storesID)
+                                                    .getDocuments(),
+                                                builder: (context, snap) {
+                                                  if (!snap.hasData)
+                                                    return LoadingWidget();
+                                                  else if (snap.data.documents
+                                                          .length ==
+                                                      0)
+                                                    return NoRecordWidget();
+                                                  else {
+                                                    return ListView(
+                                                        children: snap
+                                                            .data.documents
+                                                            .map((doc) => FutureBuilder<
+                                                                    DocumentSnapshot>(
+                                                                future: Firestore
+                                                                    .instance
+                                                                    .collection(
+                                                                        "stores")
+                                                                    .document(doc
+                                                                            .data[
+                                                                        "store"])
+                                                                    .get(),
+                                                                builder: (context,
+                                                                    snapStore) {
+                                                                  if (!snapStore
+                                                                      .hasData)
+                                                                    return LoadingWidget();
+                                                                  else {
+                                                                    if (snapStore
+                                                                            .data
+                                                                            .data ==
+                                                                        null)
+                                                                      return Container();
+                                                                    else
+                                                                      return PlaceTile2(
+                                                                          snapStore
+                                                                              .data);
+                                                                  }
+                                                                }))
+                                                            .toList());
+                                                  }
+                                                });
+                                          },
+                                        ),
+                                      ),
+                                    ),
+                            ],
+                          ),
+                        )
+                      : Expanded(
+                          child: Column(
+                            children: <Widget>[
+                              Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 12, vertical: 12),
+                                child: Text(
+                                  "LISTA DE UNIDADES DE SAÚDE ENCONTRADAS",
+                                  style: TextStyle(
+                                      fontSize: 16.0,
+                                      fontWeight: FontWeight.bold,
+                                      color: Theme.of(context).primaryColor),
+                                ),
+                              ),
+                              Expanded(
+                                child: Padding(
+                                  padding: const EdgeInsets.all(4.0),
+                                  child: FutureBuilder<QuerySnapshot>(
+                                    future: Firestore.instance
+                                        .collection("store_specialty")
+                                        .where("specialty",
+                                            isEqualTo: selectedSpecialty)
+                                        .getDocuments(),
+                                    builder: (context, snapshot) {
+                                      if (!snapshot.hasData)
+                                        return LoadingWidget();
+                                      else if (snapshot.data.documents.length ==
+                                          0)
+                                        return NoRecordWidget();
+                                      else {
+                                        return ListView(
+                                            children: snapshot.data.documents
+                                                .map((doc) => FutureBuilder<
+                                                        DocumentSnapshot>(
+                                                    future: Firestore.instance
+                                                        .collection("stores")
+                                                        .document(
+                                                            doc.data["store"])
+                                                        .get(),
+                                                    builder: (context, snap) {
+                                                      if (!snap.hasData)
+                                                        return LoadingWidget();
+                                                      else {
+                                                        if (snap.data.data ==
+                                                            null)
+                                                          return Container();
+                                                        else
+                                                          return PlaceTile2(
+                                                              snap.data);
+                                                      }
+                                                    }))
+                                                .toList());
+                                      }
+                                    },
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        )
+            ],
+          ),
+        ],
+      )),
     );
   }
 }
