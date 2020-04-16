@@ -5,7 +5,6 @@ import 'package:onde_tem_saude_app/routes/routes.dart';
 import 'package:onde_tem_saude_app/ui/general/login_page.dart';
 import 'package:onde_tem_saude_app/ui/tabs/home_tab.dart';
 import 'package:onde_tem_saude_app/ui/tiles/drawer_tile.dart';
-import 'package:scoped_model/scoped_model.dart';
 
 class CustomDrawer extends StatelessWidget {
   final String route;
@@ -31,7 +30,7 @@ class CustomDrawer extends StatelessWidget {
               Container(
                 margin: EdgeInsets.only(bottom: 8.0),
                 padding: EdgeInsets.fromLTRB(32.0, 16.0, 16.0, 8.0),
-                height: 70.0,
+                height: 90.0,
                 child: Stack(
                   children: <Widget>[
                     Positioned(
@@ -46,48 +45,43 @@ class CustomDrawer extends StatelessWidget {
                       ),
                     ),
                     Positioned(
-                        left: 0.0,
-                        bottom: 0.0,
-                        child: ScopedModelDescendant<UserModel>(
-                          builder: (context, child, model) {
-                            return Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: <Widget>[
-                                Text(
-                                  "Olá, " +
-                                      (!model.isLoggedIn()
-                                          ? ""
-                                          : model.userData["name"]),
-                                  style: TextStyle(
-                                      fontSize: 18.0,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.grey[700]),
-                                ),
-                                GestureDetector(
-                                  child: Text(
-                                    !model.isLoggedIn()
-                                        ? "Entre ou cadastre-se..."
-                                        : "Sair",
-                                    style: TextStyle(
-                                      color: Theme.of(context).primaryColor,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  onTap: () {
-                                    if (!model.isLoggedIn()) {
-                                      Navigator.of(context).push(
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  LoginPage()));
-                                    } else {
-                                      model.signOut();
-                                    }
-                                  },
-                                )
-                              ],
-                            );
-                          },
-                        ))
+                      left: 0.0,
+                      bottom: 0.0,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Text(
+                            "Olá, " +
+                                (!UserModel.of(context).isLoggedIn()
+                                    ? ""
+                                    : UserModel.of(context).userData["name"]),
+                            style: TextStyle(
+                                fontSize: 22.0,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.grey[700]),
+                          ),
+                          GestureDetector(
+                            child: Text(
+                              !UserModel.of(context).isLoggedIn()
+                                  ? "Entre ou cadastre-se..."
+                                  : "Sair",
+                              style: TextStyle(
+                                  color: Theme.of(context).primaryColor,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 18.0),
+                            ),
+                            onTap: () {
+                              if (!UserModel.of(context).isLoggedIn()) {
+                                Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (context) => LoginPage()));
+                              } else {
+                                UserModel.of(context).signOut();
+                              }
+                            },
+                          )
+                        ],
+                      ),
+                    )
                   ],
                 ),
               ),
@@ -107,15 +101,14 @@ class CustomDrawer extends StatelessWidget {
                   22.0),
               //DrawerTile(FontAwesomeIcons.fileSignature, "Sobre",
               //    MenuPages.aboutUs, route == Routes.aboutUs, 22.0),
-              DrawerTile(Icons.message, "Fale Conosco", MenuPages.contactUs,
-                  route == Routes.contactUs, 25.0),
-              Container(child: ScopedModelDescendant<UserModel>(
-                  builder: (context, child, model) {
-                return model.isLoggedIn()
-                    ? DrawerTile(FontAwesomeIcons.addressCard, "Meu Perfil",
-                        MenuPages.profile, route == Routes.profile, 22.0)
-                    : Container();
-              })),
+              UserModel.of(context).isLoggedIn()
+                  ? DrawerTile(Icons.message, "Fale Conosco",
+                      MenuPages.contactUs, route == Routes.contactUs, 25.0)
+                  : Container(),
+              UserModel.of(context).isLoggedIn()
+                  ? DrawerTile(FontAwesomeIcons.addressCard, "Meu Perfil",
+                      MenuPages.profile, route == Routes.profile, 22.0)
+                  : Container(),
             ],
           )
         ],

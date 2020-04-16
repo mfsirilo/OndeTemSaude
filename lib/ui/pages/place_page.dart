@@ -67,7 +67,7 @@ class _PlacePageState extends State<PlacePage> {
                   mainAxisSize: MainAxisSize.max,
                   children: <Widget>[
                     Text(
-                      place["title"],
+                      place["title"].toUpperCase(),
                       style: TextStyle(
                           fontSize: 20.0, fontWeight: FontWeight.w500),
                       maxLines: 3,

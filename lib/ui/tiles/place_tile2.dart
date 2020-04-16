@@ -28,7 +28,7 @@ class PlaceTile2 extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Text(
-                      snapshot.data["title"],
+                      snapshot.data["title"].toString().toUpperCase(),
                       textAlign: TextAlign.start,
                       style: TextStyle(
                           fontWeight: FontWeight.bold, fontSize: 17.0),

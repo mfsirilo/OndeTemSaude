@@ -43,21 +43,6 @@ class _HomeTabState extends State<HomeTab> {
         backgroundColor: Theme.of(context).primaryColor,
         centerTitle: true,
         elevation: 0,
-        actions: <Widget>[
-          showListAllButton
-              ? Container()
-              : IconButton(
-                  icon: Icon(
-                    showListAll ? Icons.grid_on : Icons.grid_off,
-                    color: Colors.white,
-                  ),
-                  onPressed: () {
-                    setState(() {
-                      showListAll = !showListAll;
-                    });
-                  },
-                )
-        ],
       ),
       drawer: CustomDrawer(HomeTab.routeName),
       backgroundColor: Colors.white,

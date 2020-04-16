@@ -69,9 +69,14 @@ class _ContactUsTabState extends State<ContactUsTab> {
                             controller: _emailController,
                             decoration: InputDecoration(
                                 hasFloatingPlaceholder: true,
-                                labelText: "E-mail",
+                                labelText: "E-mail*",
                                 icon: Icon(Icons.email)),
                             keyboardType: TextInputType.emailAddress,
+                            validator: (text) {
+                              if (text.isEmpty)
+                                return "Informe a email para contato!";
+                              return null;
+                            },
                           ),
                           SizedBox(
                             height: 16.0,
