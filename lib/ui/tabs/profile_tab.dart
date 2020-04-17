@@ -211,7 +211,7 @@ class _ProfileTabState extends State<ProfileTab> {
       userName += " " + user["name"].split(" ")[0];
 
     return Positioned(
-        top: (height * .10) / 2 - 45,
+        top: (height * .13) / 2 - 45,
         width: width,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -225,7 +225,8 @@ class _ProfileTabState extends State<ProfileTab> {
                   border: new Border.all(
                       color: Theme.of(context).primaryColor, width: 3),
                   image: DecorationImage(
-                      fit: BoxFit.cover, image: AssetImage("images/logo.png"))),
+                      fit: BoxFit.cover,
+                      image: AssetImage("images/logo_192.png"))),
             ),
             SizedBox(height: 5),
             Row(
