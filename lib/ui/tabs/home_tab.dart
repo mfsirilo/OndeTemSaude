@@ -235,6 +235,10 @@ class _HomeTabState extends State<HomeTab> {
                 ),
               ),
               Divider(),
+//              Container(
+//                child: Image.network('http://www.riofer.com.br/assinaturas/logo_192.png'),
+//              ),
+//              Divider(),
               showListAll ||
                       (selectedDistrict == null && selectedSpecialty == null)
                   ? Expanded(
@@ -251,6 +255,10 @@ class _HomeTabState extends State<HomeTab> {
                                   color: Theme.of(context).primaryColor),
                             ),
                           ),
+                          Container(
+                            child: Image.network('http://www.riofer.com.br/assinaturas/logo_72.png'),
+                          ),
+                          Divider(),
                           Expanded(
                             child: Padding(
                               padding: const EdgeInsets.all(4.0),
@@ -291,6 +299,9 @@ class _HomeTabState extends State<HomeTab> {
                                       fontWeight: FontWeight.bold,
                                       color: Theme.of(context).primaryColor),
                                 ),
+                              ),
+                              Container(
+                                child: Image.network('http://www.riofer.com.br/assinaturas/logo_72.png'),
                               ),
                               selectedSpecialty == null
                                   ? Expanded(
@@ -433,6 +444,9 @@ class _HomeTabState extends State<HomeTab> {
                                       fontWeight: FontWeight.bold,
                                       color: Theme.of(context).primaryColor),
                                 ),
+                              ),
+                              Container(
+                                child: Image.network('http://www.riofer.com.br/assinaturas/logo_72.png'),
                               ),
                               Expanded(
                                 child: Padding(
