@@ -235,10 +235,6 @@ class _HomeTabState extends State<HomeTab> {
                 ),
               ),
               Divider(),
-//              Container(
-//                child: Image.network('http://www.riofer.com.br/assinaturas/logo_192.png'),
-//              ),
-//              Divider(),
               showListAll ||
                       (selectedDistrict == null && selectedSpecialty == null)
                   ? Expanded(
@@ -255,10 +251,14 @@ class _HomeTabState extends State<HomeTab> {
                                   color: Theme.of(context).primaryColor),
                             ),
                           ),
-                          Container(
-                            child: Image.network('http://www.riofer.com.br/assinaturas/logo_72.png'),
+                          SizedBox(
+                            height: 25.0,
+                            child: Image.asset(
+                              "assets/images/logo.png",
+                              fit: BoxFit.contain,
+                            ),
                           ),
-                          Divider(),
+                          SizedBox(height: 45.0),
                           Expanded(
                             child: Padding(
                               padding: const EdgeInsets.all(4.0),
@@ -300,9 +300,14 @@ class _HomeTabState extends State<HomeTab> {
                                       color: Theme.of(context).primaryColor),
                                 ),
                               ),
-                              Container(
-                                child: Image.network('http://www.riofer.com.br/assinaturas/logo_72.png'),
+                              SizedBox(
+                                height: 55.0,
+                                child: Image.asset(
+                                  "assets/images/logo.png",
+                                  fit: BoxFit.contain,
+                                ),
                               ),
+                              SizedBox(height: 30.0),
                               selectedSpecialty == null
                                   ? Expanded(
                                       child: Padding(

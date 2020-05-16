@@ -99,8 +99,8 @@ class CustomDrawer extends StatelessWidget {
                       : MenuPages.home,
                   route == Routes.home,
                   22.0),
-              //DrawerTile(FontAwesomeIcons.fileSignature, "Sobre",
-              //    MenuPages.aboutUs, route == Routes.aboutUs, 22.0),
+//              DrawerTile(FontAwesomeIcons.fileSignature, "Sobre",
+//                  MenuPages.aboutUs, route == Routes.aboutUs, 22.0),
               UserModel.of(context).isLoggedIn()
                   ? DrawerTile(Icons.message, "Fale Conosco",
                       MenuPages.contactUs, route == Routes.contactUs, 25.0)

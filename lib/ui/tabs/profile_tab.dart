@@ -225,7 +225,7 @@ class _ProfileTabState extends State<ProfileTab> {
                   border: new Border.all(
                       color: Theme.of(context).primaryColor, width: 3),
                   image: DecorationImage(
-                      fit: BoxFit.cover, image: AssetImage("images/logo.png"))),
+                      fit: BoxFit.cover, image: AssetImage("assets/images/logo.png"))),
             ),
             SizedBox(height: 5),
             Row(
