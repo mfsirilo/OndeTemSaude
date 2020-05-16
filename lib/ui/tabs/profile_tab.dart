@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_custom_clippers/flutter_custom_clippers.dart';
 import 'package:intl/intl.dart';
 import 'package:onde_tem_saude_app/models/user_model.dart';
-import 'package:onde_tem_saude_app/ui/general/login_page.dart';
-import 'package:onde_tem_saude_app/ui/pages/user_page.dart';
+import 'package:onde_tem_saude_app/ui/views/login_view.dart';
+import 'package:onde_tem_saude_app/ui/views/user_view.dart';
 import 'package:onde_tem_saude_app/ui/widgets/custom_drawer.dart';
 
 class ProfileTab extends StatefulWidget {
@@ -225,7 +225,8 @@ class _ProfileTabState extends State<ProfileTab> {
                   border: new Border.all(
                       color: Theme.of(context).primaryColor, width: 3),
                   image: DecorationImage(
-                      fit: BoxFit.cover, image: AssetImage("assets/images/logo.png"))),
+                      fit: BoxFit.cover,
+                      image: AssetImage("assets/images/logo.png"))),
             ),
             SizedBox(height: 5),
             Row(

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:onde_tem_saude_app/models/user_model.dart';
 import 'package:onde_tem_saude_app/routes/routes.dart';
-import 'package:onde_tem_saude_app/ui/general/login_page.dart';
+import 'package:onde_tem_saude_app/ui/views/login_view.dart';
 import 'package:onde_tem_saude_app/ui/tabs/home_tab.dart';
 import 'package:onde_tem_saude_app/ui/tiles/drawer_tile.dart';
 

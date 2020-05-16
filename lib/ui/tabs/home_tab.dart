@@ -341,13 +341,12 @@ class _HomeTabState extends State<HomeTab> {
                             ),
                           ),
                           SizedBox(
-                            height: 25.0,
+                            height: 55.0,
                             child: Image.asset(
                               "assets/images/logo.png",
                               fit: BoxFit.contain,
                             ),
                           ),
-                          SizedBox(height: 45.0),
                           Expanded(
                             child: Padding(
                               padding: const EdgeInsets.all(4.0),
@@ -396,7 +395,6 @@ class _HomeTabState extends State<HomeTab> {
                                   fit: BoxFit.contain,
                                 ),
                               ),
-                              SizedBox(height: 30.0),
                               selectedSpecialty == null
                                   ? Expanded(
                                       child: Padding(

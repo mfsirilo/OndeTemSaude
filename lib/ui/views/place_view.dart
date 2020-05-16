@@ -4,7 +4,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:onde_tem_saude_app/ui/widgets/loading_widget.dart';
 import 'package:onde_tem_saude_app/ui/widgets/network_image.dart';
-import 'package:onde_tem_saude_app/ui/widgets/no_record_widget.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class PlacePage extends StatefulWidget {
@@ -331,7 +330,8 @@ class _PlacePageState extends State<PlacePage> {
                                     else if (snapshot.data.documents.length ==
                                         0) {
                                       hasSpecialty = false;
-                                      return NoRecordWidget();
+                                      return Text(
+                                          "Nenhum registro encontrado.");
                                     } else {
                                       List<String> list = snapshot
                                           .data.documents
@@ -378,7 +378,8 @@ class _PlacePageState extends State<PlacePage> {
                                     else if (snapshot.data.documents.length ==
                                         0) {
                                       hasService = false;
-                                      return NoRecordWidget();
+                                      return Text(
+                                          "Nenhum registro encontrado.");
                                     } else {
                                       List<String> list = snapshot
                                           .data.documents
@@ -421,10 +422,11 @@ class _PlacePageState extends State<PlacePage> {
                                   builder: (context, snapshot) {
                                     if (!snapshot.hasData)
                                       return LoadingWidget();
-                                    else if (snapshot.data.documents.length ==
-                                        0) {
+                                    else if (snapshot.data.documents == null ||
+                                        snapshot.data.documents.length == 0) {
                                       hasDistrict = false;
-                                      return NoRecordWidget();
+                                      return Text(
+                                          "Nenhum registro encontrado.");
                                     } else {
                                       List<String> list = snapshot
                                           .data.documents

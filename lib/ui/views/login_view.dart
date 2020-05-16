@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:onde_tem_saude_app/models/user_model.dart';
-import 'package:onde_tem_saude_app/ui/views/signup_page.dart';
+import 'package:onde_tem_saude_app/ui/views/signup_view.dart';
 import 'package:scoped_model/scoped_model.dart';
 
 class LoginPage extends StatefulWidget {

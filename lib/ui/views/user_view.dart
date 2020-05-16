@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_masked_text/flutter_masked_text.dart';
-import 'package:onde_tem_saude_app/models/user_bloc.dart';
+import 'package:onde_tem_saude_app/controllers/user_bloc.dart';
 import 'package:onde_tem_saude_app/models/user_model.dart';
 
 class UserPage extends StatefulWidget {
