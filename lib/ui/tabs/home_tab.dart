@@ -23,7 +23,7 @@ class _HomeTabState extends State<HomeTab> {
   bool showListAllButton = true;
   String selectedCity = "0EvkbABbbt4sk1rQOkT1";
   final String userDistrict;
-  String selectedDistrict, selectedSpecialty;
+  String selectedDistrict, selectedSpecialty, selectedService;
 
   _HomeTabState(this.userDistrict);
 
@@ -234,13 +234,102 @@ class _HomeTabState extends State<HomeTab> {
                   ],
                 ),
               ),
+//              Padding(
+//                padding: const EdgeInsets.symmetric(horizontal: 12.0),
+//                child: Row(
+//                  children: <Widget>[
+//                    Container(
+//                      width: 100,
+//                      child: Text(
+//                        "Serviços:",
+//                        style: TextStyle(fontWeight: FontWeight.bold),
+//                      ),
+//                    ),
+//                    StreamBuilder<QuerySnapshot>(
+//                        stream: Firestore.instance
+//                            .collection("services")
+//                            .snapshots(),
+//                        builder: (context, snapshot) {
+//                          if (!snapshot.hasData)
+//                            return const Text("Carregando...");
+//                          else {
+//                            List<DropdownMenuItem> currencyItems = [];
+//                            for (int i = 0;
+//                                i < snapshot.data.documents.length;
+//                                i++) {
+//                              DocumentSnapshot snap =
+//                                  snapshot.data.documents[i];
+//                              currencyItems.add(
+//                                DropdownMenuItem(
+//                                  child: Padding(
+//                                    padding:
+//                                        EdgeInsets.only(left: 8.0, right: 8.0),
+//                                    child: Text(
+//                                      snap["name"],
+//                                      style: TextStyle(
+//                                          color:
+//                                              Theme.of(context).primaryColor),
+//                                    ),
+//                                  ),
+//                                  value: "${snap.documentID}",
+//                                ),
+//                              );
+//                            }
+//                            return Expanded(
+//                              child: Padding(
+//                                padding: const EdgeInsets.only(
+//                                    left: 6.0, right: 6.0),
+//                                child: Column(
+//                                  crossAxisAlignment: CrossAxisAlignment.start,
+//                                  mainAxisAlignment:
+//                                      MainAxisAlignment.spaceBetween,
+//                                  children: <Widget>[
+//                                    DropdownButton(
+//                                      items: currencyItems,
+//                                      onChanged: (currencyValue) {
+//                                        setState(() {
+//                                          showListAllButton = false;
+//                                          showListAll = false;
+//                                          selectedService = currencyValue;
+//                                        });
+//                                      },
+//                                      value: selectedService,
+//                                      isExpanded: true,
+//                                      hint: Text(
+//                                        "  selecione...",
+//                                        style: TextStyle(
+//                                            color:
+//                                                Theme.of(context).primaryColor),
+//                                      ),
+//                                    ),
+//                                  ],
+//                                ),
+//                              ),
+//                            );
+//                          }
+//                        }),
+//                    selectedService != null
+//                        ? IconButton(
+//                            icon: Icon(Icons.close),
+//                            onPressed: () {
+//                              setState(() {
+//                                selectedService = null;
+//                              });
+//                            },
+//                          )
+//                        : Container()
+//                  ],
+//                ),
+//              ),
               Divider(),
 //              Container(
 //                child: Image.network('http://www.riofer.com.br/assinaturas/logo_192.png'),
 //              ),
 //              Divider(),
               showListAll ||
-                      (selectedDistrict == null && selectedSpecialty == null)
+                      (selectedDistrict == null &&
+                          selectedSpecialty == null &&
+                          selectedService == null)
                   ? Expanded(
                       child: Column(
                         children: <Widget>[
@@ -256,7 +345,8 @@ class _HomeTabState extends State<HomeTab> {
                             ),
                           ),
                           Container(
-                            child: Image.network('http://www.riofer.com.br/assinaturas/logo_72.png'),
+                            child: Image.network(
+                                'http://www.riofer.com.br/assinaturas/logo_72.png'),
                           ),
                           Divider(),
                           Expanded(
@@ -301,7 +391,8 @@ class _HomeTabState extends State<HomeTab> {
                                 ),
                               ),
                               Container(
-                                child: Image.network('http://www.riofer.com.br/assinaturas/logo_72.png'),
+                                child: Image.network(
+                                    'http://www.riofer.com.br/assinaturas/logo_72.png'),
                               ),
                               selectedSpecialty == null
                                   ? Expanded(
@@ -446,7 +537,8 @@ class _HomeTabState extends State<HomeTab> {
                                 ),
                               ),
                               Container(
-                                child: Image.network('http://www.riofer.com.br/assinaturas/logo_72.png'),
+                                child: Image.network(
+                                    'http://www.riofer.com.br/assinaturas/logo_72.png'),
                               ),
                               Expanded(
                                 child: Padding(

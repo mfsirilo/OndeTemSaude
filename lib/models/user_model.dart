@@ -82,6 +82,7 @@ class UserModel extends Model {
   }
 
   bool isLoggedIn() {
+    if (userData == null) signOut();
     return firebaseUser != null;
   }
 
