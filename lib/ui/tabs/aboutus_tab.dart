@@ -29,6 +29,16 @@ class _AboutUsTabState extends State<AboutUsTab> {
                 height: 55,
               ),
             ),
+            Divider(),
+            SizedBox(
+              height: 155.0,
+              child: Image.asset(
+                "assets/images/logo.png",
+                fit: BoxFit.contain,
+                alignment: Alignment.center,
+              ),
+            ),
+            SizedBox(height: 450.0),
             Container(),
           ],
         ));
