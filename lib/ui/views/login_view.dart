@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:onde_tem_saude_app/models/user_model.dart';
 import 'package:onde_tem_saude_app/ui/views/signup_view.dart';
+import 'package:onde_tem_saude_app/validators/validators.dart';
 import 'package:scoped_model/scoped_model.dart';
 
 class LoginPage extends StatefulWidget {
@@ -62,11 +63,7 @@ class _LoginPageState extends State<LoginPage> {
                                           borderRadius:
                                               BorderRadius.circular(32.0))),
                                   keyboardType: TextInputType.emailAddress,
-                                  validator: (text) {
-                                    if (text.isEmpty || !text.contains("@"))
-                                      return "E-mail inválido!";
-                                    return null;
-                                  },
+                                  validator: validatorEmail,
                                   onEditingComplete: () {
                                     FocusScope.of(context)
                                         .requestFocus(_passFocus);
@@ -85,11 +82,7 @@ class _LoginPageState extends State<LoginPage> {
                                           borderRadius:
                                               BorderRadius.circular(32.0))),
                                   obscureText: true,
-                                  validator: (text) {
-                                    if (text.isEmpty || text.length < 6)
-                                      return "Senha inválida!";
-                                    return null;
-                                  },
+                                  validator: validatorSenha,
                                   onEditingComplete: () {
                                     if (_formKey.currentState.validate()) {
                                       model.signIn(
@@ -104,7 +97,7 @@ class _LoginPageState extends State<LoginPage> {
                                   alignment: Alignment.centerRight,
                                   child: FlatButton(
                                       onPressed: () {
-                                        if (_emailController.text.isEmpty) {
+                                        if (validatorEmail(_emailController.text) != null) {
                                           _scaffoldKey.currentState
                                               .showSnackBar(SnackBar(
                                             content: Text(
