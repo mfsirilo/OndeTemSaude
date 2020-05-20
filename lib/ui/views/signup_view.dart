@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_custom_clippers/flutter_custom_clippers.dart';
 import 'package:flutter_masked_text/flutter_masked_text.dart';
 import 'package:onde_tem_saude_app/models/user_model.dart';
+import 'package:onde_tem_saude_app/validators/validators.dart';
 import 'package:scoped_model/scoped_model.dart';
 
 class SignUpPage extends StatefulWidget {
@@ -73,17 +74,13 @@ class _SignUpPageState extends State<SignUpPage> {
                         controller: _nameController,
                         decoration: InputDecoration(
                             fillColor: Colors.transparent,
-                            hasFloatingPlaceholder: true,
                             filled: true,
                             labelText: "Nome",
                             icon: Icon(Icons.person)),
                         onEditingComplete: () {
                           FocusScope.of(context).requestFocus(_emailFocus);
                         },
-                        validator: (text) {
-                          if (text.isEmpty) return "Nome inválido!";
-                          return null;
-                        },
+                        validator: validatorNome,
                       ),
                       SizedBox(
                         height: 16.0,
@@ -96,17 +93,11 @@ class _SignUpPageState extends State<SignUpPage> {
                         },
                         decoration: InputDecoration(
                             fillColor: Colors.transparent,
-                            hasFloatingPlaceholder: true,
                             filled: true,
                             labelText: "E-mail",
                             icon: Icon(Icons.email)),
                         keyboardType: TextInputType.emailAddress,
-                        validator: (text) {
-                          if (text.isEmpty ||
-                              !text.contains("@") ||
-                              !text.contains(".")) return "E-mail inválido!";
-                          return null;
-                        },
+                        validator: validatorEmail,
                       ),
                       SizedBox(
                         height: 16.0,
@@ -116,17 +107,13 @@ class _SignUpPageState extends State<SignUpPage> {
                         focusNode: _addressFocus,
                         decoration: InputDecoration(
                             fillColor: Colors.transparent,
-                            hasFloatingPlaceholder: true,
                             filled: true,
                             labelText: "Endereço",
                             icon: Icon(Icons.location_on)),
                         onEditingComplete: () {
                           FocusScope.of(context).requestFocus(_phoneFocus);
                         },
-                        validator: (text) {
-                          if (text.isEmpty) return "Endereço inválido!";
-                          return null;
-                        },
+                        validator: validatorEndereco,
                       ),
                       SizedBox(
                         height: 20.0,
@@ -292,7 +279,6 @@ class _SignUpPageState extends State<SignUpPage> {
                                 controller: _cepController,
                                 decoration: InputDecoration(
                                     fillColor: Colors.transparent,
-                                    hasFloatingPlaceholder: true,
                                     filled: true,
                                     labelText: "CEP",
                                     icon: Icon(Icons.location_on)),
@@ -321,17 +307,13 @@ class _SignUpPageState extends State<SignUpPage> {
                         focusNode: _phoneFocus,
                         decoration: InputDecoration(
                             fillColor: Colors.transparent,
-                            hasFloatingPlaceholder: true,
                             filled: true,
                             labelText: "Telefone",
                             icon: Icon(Icons.phone)),
                         onEditingComplete: () {
                           FocusScope.of(context).requestFocus(_passFocus);
                         },
-                        validator: (text) {
-                          if (text.isEmpty) return "Telefone inválido!";
-                          return null;
-                        },
+                        validator: validatorTelefone,
                       ),
                       SizedBox(
                         height: 16.0,
@@ -346,7 +328,6 @@ class _SignUpPageState extends State<SignUpPage> {
                         obscureText: !_passwordVisible,
                         decoration: InputDecoration(
                           fillColor: Colors.transparent,
-                          hasFloatingPlaceholder: true,
                           filled: true,
                           labelText: "Senha",
                           icon: Icon(Icons.lock),
@@ -371,11 +352,7 @@ class _SignUpPageState extends State<SignUpPage> {
                                 : Icons.visibility_off),
                           ),
                         ),
-                        validator: (text) {
-                          if (text.isEmpty || text.length < 6)
-                            return "Senha inválida!";
-                          return null;
-                        },
+                        validator: validatorSenha,
                       ),
                       SizedBox(
                         height: 16.0,
@@ -386,7 +363,6 @@ class _SignUpPageState extends State<SignUpPage> {
                         focusNode: _passConfirmFocus,
                         decoration: InputDecoration(
                           fillColor: Colors.transparent,
-                          hasFloatingPlaceholder: true,
                           filled: true,
                           labelText: "Confirme a Senha",
                           icon: Icon(Icons.lock),
@@ -417,11 +393,8 @@ class _SignUpPageState extends State<SignUpPage> {
                           FocusScope.of(context).requestFocus(FocusNode());
                         },
                         validator: (text) {
-                          if (text.isEmpty || text.length < 6)
-                            return "Senha inválida!";
-                          if (text != _passController.text)
-                            return "Confirmação de Senha Diferente da Senha!";
-                          return null;
+                          return validatorConfirmarSenha(
+                              _passController.text, text);
                         },
                       ),
                       SizedBox(

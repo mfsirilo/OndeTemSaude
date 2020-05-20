@@ -58,9 +58,7 @@ class _ContactUsTabState extends State<ContactUsTab> {
                           TextFormField(
                             controller: _nameController,
                             decoration: InputDecoration(
-                                hasFloatingPlaceholder: true,
-                                labelText: "Nome",
-                                icon: Icon(Icons.person)),
+                                labelText: "Nome", icon: Icon(Icons.person)),
                           ),
                           SizedBox(
                             height: 16.0,
@@ -68,9 +66,7 @@ class _ContactUsTabState extends State<ContactUsTab> {
                           TextFormField(
                             controller: _emailController,
                             decoration: InputDecoration(
-                                hasFloatingPlaceholder: true,
-                                labelText: "E-mail*",
-                                icon: Icon(Icons.email)),
+                                labelText: "E-mail*", icon: Icon(Icons.email)),
                             keyboardType: TextInputType.emailAddress,
                             validator: (text) {
                               if (text.isEmpty)
@@ -84,9 +80,7 @@ class _ContactUsTabState extends State<ContactUsTab> {
                           TextFormField(
                             controller: _phoneController,
                             decoration: InputDecoration(
-                                hasFloatingPlaceholder: true,
-                                labelText: "Telefone",
-                                icon: Icon(Icons.phone)),
+                                labelText: "Telefone", icon: Icon(Icons.phone)),
                             keyboardType: TextInputType.phone,
                           ),
                           SizedBox(
@@ -95,9 +89,7 @@ class _ContactUsTabState extends State<ContactUsTab> {
                           TextFormField(
                             controller: _messageController,
                             maxLines: 4,
-                            decoration: InputDecoration(
-                                hasFloatingPlaceholder: true,
-                                hintText: "Mensagem*"),
+                            decoration: InputDecoration(hintText: "Mensagem*"),
                             validator: (text) {
                               if (text.isEmpty) return "Informe a mensagem!";
                               return null;
