@@ -137,7 +137,7 @@ class _UserPageState extends State<UserPage> {
                         children: <Widget>[
                           StreamBuilder<QuerySnapshot>(
                               stream: Firestore.instance
-                                  .collection("cities")
+                                  .collection("cities").orderBy("name",descending: false)
                                   .where("active", isEqualTo: true)
                                   .snapshots(),
                               builder: (context, snapshot) {
@@ -221,7 +221,7 @@ class _UserPageState extends State<UserPage> {
                                   stream: Firestore.instance
                                       .collection("cities")
                                       .document(selectedCity)
-                                      .collection("districts")
+                                      .collection("districts").orderBy("name", descending: false)
                                       .where("active", isEqualTo: true)
                                       .snapshots(),
                                   builder: (context, snapshot) {

@@ -4,6 +4,7 @@ import 'package:flutter_masked_text/flutter_masked_text.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:onde_tem_saude_app/models/contact_model.dart';
 import 'package:onde_tem_saude_app/ui/widgets/custom_drawer.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class ContactUsTab extends StatefulWidget {
   static const String routeName = '/contactUs';
@@ -27,7 +28,7 @@ class _ContactUsTabState extends State<ContactUsTab> {
         key: _scaffoldKey,
         drawer: CustomDrawer(ContactUsTab.routeName),
         appBar: AppBar(
-          title: Text("Nos envie uma mensagem..."),
+          title: Text("Como podemos melhorar?"),
           centerTitle: true,
           elevation: 0,
         ),

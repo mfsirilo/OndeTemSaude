@@ -70,7 +70,7 @@ class _HomeTabState extends State<HomeTab> {
                         stream: Firestore.instance
                             .collection("cities")
                             .document(selectedCity)
-                            .collection("districts")
+                            .collection("districts").orderBy("name", descending:false)
                             .where("active", isEqualTo: true)
                             .snapshots(),
                         builder: (context, snapshot) {
@@ -160,7 +160,7 @@ class _HomeTabState extends State<HomeTab> {
                     ),
                     StreamBuilder<QuerySnapshot>(
                         stream: Firestore.instance
-                            .collection("specialties")
+                            .collection("specialties").orderBy("name", descending:false)
                             .snapshots(),
                         builder: (context, snapshot) {
                           if (!snapshot.hasData)
@@ -234,93 +234,93 @@ class _HomeTabState extends State<HomeTab> {
                   ],
                 ),
               ),
-//              Padding(
-//                padding: const EdgeInsets.symmetric(horizontal: 12.0),
-//                child: Row(
-//                  children: <Widget>[
-//                    Container(
-//                      width: 100,
-//                      child: Text(
-//                        "Serviços:",
-//                        style: TextStyle(fontWeight: FontWeight.bold),
-//                      ),
-//                    ),
-//                    StreamBuilder<QuerySnapshot>(
-//                        stream: Firestore.instance
-//                            .collection("services")
-//                            .snapshots(),
-//                        builder: (context, snapshot) {
-//                          if (!snapshot.hasData)
-//                            return const Text("Carregando...");
-//                          else {
-//                            List<DropdownMenuItem> currencyItems = [];
-//                            for (int i = 0;
-//                                i < snapshot.data.documents.length;
-//                                i++) {
-//                              DocumentSnapshot snap =
-//                                  snapshot.data.documents[i];
-//                              currencyItems.add(
-//                                DropdownMenuItem(
-//                                  child: Padding(
-//                                    padding:
-//                                        EdgeInsets.only(left: 8.0, right: 8.0),
-//                                    child: Text(
-//                                      snap["name"],
-//                                      style: TextStyle(
-//                                          color:
-//                                              Theme.of(context).primaryColor),
-//                                    ),
-//                                  ),
-//                                  value: "${snap.documentID}",
-//                                ),
-//                              );
-//                            }
-//                            return Expanded(
-//                              child: Padding(
-//                                padding: const EdgeInsets.only(
-//                                    left: 6.0, right: 6.0),
-//                                child: Column(
-//                                  crossAxisAlignment: CrossAxisAlignment.start,
-//                                  mainAxisAlignment:
-//                                      MainAxisAlignment.spaceBetween,
-//                                  children: <Widget>[
-//                                    DropdownButton(
-//                                      items: currencyItems,
-//                                      onChanged: (currencyValue) {
-//                                        setState(() {
-//                                          showListAllButton = false;
-//                                          showListAll = false;
-//                                          selectedService = currencyValue;
-//                                        });
-//                                      },
-//                                      value: selectedService,
-//                                      isExpanded: true,
-//                                      hint: Text(
-//                                        "  selecione...",
-//                                        style: TextStyle(
-//                                            color:
-//                                                Theme.of(context).primaryColor),
-//                                      ),
-//                                    ),
-//                                  ],
-//                                ),
-//                              ),
-//                            );
-//                          }
-//                        }),
-//                    selectedService != null
-//                        ? IconButton(
-//                            icon: Icon(Icons.close),
-//                            onPressed: () {
-//                              setState(() {
-//                                selectedService = null;
-//                              });
-//                            },
-//                          )
-//                        : Container()
-//                  ],
-//                ),
-//              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                child: Row(
+                  children: <Widget>[
+                    Container(
+                      width: 100,
+                      child: Text(
+                        "Serviços:",
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                    StreamBuilder<QuerySnapshot>(
+                        stream: Firestore.instance
+                            .collection("services").orderBy("name",descending: false)
+                            .snapshots(),
+                        builder: (context, snapshot) {
+                          if (!snapshot.hasData)
+                            return const Text("Carregando...");
+                          else {
+                            List<DropdownMenuItem> currencyItems = [];
+                            for (int i = 0;
+                                i < snapshot.data.documents.length;
+                                i++) {
+                              DocumentSnapshot snap =
+                                  snapshot.data.documents[i];
+                              currencyItems.add(
+                                DropdownMenuItem(
+                                  child: Padding(
+                                    padding:
+                                        EdgeInsets.only(left: 8.0, right: 8.0),
+                                    child: Text(
+                                      snap["name"],
+                                      style: TextStyle(
+                                          color:
+                                              Theme.of(context).primaryColor),
+                                    ),
+                                  ),
+                                  value: "${snap.documentID}",
+                                ),
+                              );
+                            }
+                            return Expanded(
+                              child: Padding(
+                                padding: const EdgeInsets.only(
+                                    left: 6.0, right: 6.0),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: <Widget>[
+                                    DropdownButton(
+                                      items: currencyItems,
+                                      onChanged: (currencyValue) {
+                                        setState(() {
+                                          showListAllButton = false;
+                                          showListAll = false;
+                                          selectedService = currencyValue;
+                                        });
+                                      },
+                                      value: selectedService,
+                                      isExpanded: true,
+                                      hint: Text(
+                                        "  selecione...",
+                                        style: TextStyle(
+                                            color:
+                                                Theme.of(context).primaryColor),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            );
+                          }
+                        }),
+                    selectedService != null
+                        ? IconButton(
+                            icon: Icon(Icons.close),
+                            onPressed: () {
+                              setState(() {
+                                selectedService = null;
+                              });
+                            },
+                          )
+                        : Container()
+                  ],
+                ),
+              ),
               Divider(),
               showListAll ||
                       (selectedDistrict == null &&
