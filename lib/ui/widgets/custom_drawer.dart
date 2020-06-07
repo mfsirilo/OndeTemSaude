@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:onde_tem_saude_app/models/user_model.dart';
 import 'package:onde_tem_saude_app/routes/routes.dart';
+import 'package:onde_tem_saude_app/ui/tabs/service_view_tab.dart';
 import 'package:onde_tem_saude_app/ui/views/login_view.dart';
 import 'package:onde_tem_saude_app/ui/tabs/home_tab.dart';
 import 'package:onde_tem_saude_app/ui/tiles/drawer_tile.dart';
@@ -89,7 +90,7 @@ class CustomDrawer extends StatelessWidget {
                 color: Theme.of(context).primaryColor,
               ),
               DrawerTile(
-                  Icons.assistant,
+                  Icons.home,
                   "Início",
                   UserModel.of(context).isLoggedIn()
                       ? HomeTab(
@@ -99,12 +100,38 @@ class CustomDrawer extends StatelessWidget {
                       : MenuPages.home,
                   route == Routes.home,
                   22.0),
+              DrawerTile(
+                  Icons.accessibility_new,
+                  "Serviços",
+                  UserModel.of(context).isLoggedIn()
+                      ? ServiceViewTab(
+                    userDistrict:
+                    UserModel.of(context).userData["district"],
+                  )
+                      : MenuPages.home,
+                  route == Routes.home,
+                  22.0),
+              DrawerTile(
+                  Icons.local_hospital,
+                  "Especialidades",
+                  UserModel.of(context).isLoggedIn()
+                      ? HomeTab(
+                    userDistrict:
+                    UserModel.of(context).userData["district"],
+                  )
+                      : MenuPages.home,
+                  route == Routes.home,
+                  22.0),
+
 //              DrawerTile(FontAwesomeIcons.fileSignature, "Sobre",
 //                  MenuPages.aboutUs, route == Routes.aboutUs, 22.0),
+              /*Se não der tempo, desativar esse trecho > */
               UserModel.of(context).isLoggedIn()
                   ? DrawerTile(Icons.message, "Fale Conosco",
                       MenuPages.contactUs, route == Routes.contactUs, 25.0)
                   : Container(),
+              /*Se não der tempo, desativar esse trecho < */
+
               UserModel.of(context).isLoggedIn()
                   ? DrawerTile(FontAwesomeIcons.addressCard, "Meu Perfil",
                       MenuPages.profile, route == Routes.profile, 22.0)
