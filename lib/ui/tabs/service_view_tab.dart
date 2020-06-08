@@ -7,16 +7,16 @@ import 'package:onde_tem_saude_app/ui/widgets/loading_widget.dart';
 import 'package:onde_tem_saude_app/ui/widgets/no_record_widget.dart';
 
 class ServiceViewTab extends StatefulWidget {
-  static const String routeName = '/home';
+  static const String routeName = '/Servicehome';
   final String userDistrict;
 
   ServiceViewTab({this.userDistrict});
 
   @override
-  _HomeTabState createState() => _HomeTabState(userDistrict);
+  _ServiceTab createState() => _ServiceTab(userDistrict);
 }
 
-class _HomeTabState extends State<ServiceViewTab> {
+class _ServiceTab extends State<ServiceViewTab> {
   bool selectedUserDistrict = true;
   bool showList = false;
   bool showListAll = true;
@@ -25,7 +25,7 @@ class _HomeTabState extends State<ServiceViewTab> {
   final String userDistrict;
   String selectedDistrict, selectedSpecialty, selectedService;
 
-  _HomeTabState(this.userDistrict);
+  _ServiceTab(this.userDistrict);
 
   @override
   void initState() {

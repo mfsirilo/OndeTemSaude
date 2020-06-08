@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:onde_tem_saude_app/models/user_model.dart';
 import 'package:onde_tem_saude_app/routes/routes.dart';
+import 'package:onde_tem_saude_app/ui/tabs/aboutus_tab.dart';
 import 'package:onde_tem_saude_app/ui/tabs/service_view_tab.dart';
 import 'package:onde_tem_saude_app/ui/views/login_view.dart';
 import 'package:onde_tem_saude_app/ui/tabs/home_tab.dart';
@@ -108,8 +109,8 @@ class CustomDrawer extends StatelessWidget {
                     userDistrict:
                     UserModel.of(context).userData["district"],
                   )
-                      : MenuPages.home,
-                  route == Routes.home,
+                      : MenuPages.service,
+                  route == Routes.service,
                   22.0),
               DrawerTile(
                   Icons.local_hospital,
@@ -136,6 +137,20 @@ class CustomDrawer extends StatelessWidget {
                   ? DrawerTile(FontAwesomeIcons.addressCard, "Meu Perfil",
                       MenuPages.profile, route == Routes.profile, 22.0)
                   : Container(),
+              Divider(
+                color: Theme.of(context).primaryColor,
+              ),
+              DrawerTile(
+                  Icons.contact_mail,
+                  "Sobre",
+                  UserModel.of(context).isLoggedIn()
+                      ? AboutUsTab(
+                    userDistrict:
+                    UserModel.of(context).userData["district"],
+                  )
+                      : MenuPages.aboutUs,
+                  route == Routes.aboutUs,
+                  22.0),
             ],
           )
         ],

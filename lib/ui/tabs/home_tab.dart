@@ -350,7 +350,7 @@ class _HomeTabState extends State<HomeTab> {
                           ),
                           Expanded(
                             child: Padding(
-                              padding: const EdgeInsets.all(4.0),
+                              padding: const EdgeInsets.all(0.0),
                               child: FutureBuilder<QuerySnapshot>(
                                 future: Firestore.instance
                                     .collection("stores")
