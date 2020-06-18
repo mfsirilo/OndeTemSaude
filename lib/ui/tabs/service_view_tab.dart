@@ -354,6 +354,7 @@ class _ServiceTab extends State<ServiceViewTab> {
                               child: FutureBuilder<QuerySnapshot>(
                                 future: Firestore.instance
                                     .collection("stores")
+                                    .where("active", isEqualTo: true)
                                     .getDocuments(),
                                 builder: (context, snapshot) {
                                   if (!snapshot.hasData)

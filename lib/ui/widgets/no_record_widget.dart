@@ -12,7 +12,7 @@ class NoRecordWidget extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           Icon(
-            Icons.grid_off,
+            Icons.block,
             size: 80.0,
             color: Theme.of(context).primaryColor,
           ),

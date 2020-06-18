@@ -354,6 +354,7 @@ class _HomeTabState extends State<HomeTab> {
                               child: FutureBuilder<QuerySnapshot>(
                                 future: Firestore.instance
                                     .collection("stores")
+                                    .where("active", isEqualTo: true)
                                     .getDocuments(),
                                 builder: (context, snapshot) {
                                   if (!snapshot.hasData)
@@ -441,7 +442,8 @@ class _HomeTabState extends State<HomeTab> {
                                                                     snap.data);
                                                             }
                                                           }))
-                                                      .toList());
+                                                      .toList()
+                                              );
                                             }
                                           },
                                         ),
@@ -514,7 +516,8 @@ class _HomeTabState extends State<HomeTab> {
                                                                               .data);
                                                                   }
                                                                 }))
-                                                            .toList());
+                                                            .toList()
+                                                    );
                                                   }
                                                 });
                                           },

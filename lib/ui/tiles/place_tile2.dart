@@ -86,7 +86,7 @@ class PlaceTile2 extends StatelessWidget {
                                   );
                                 else {
                                   return Text(
-                                    "${snapshot.data["name"]}, GOIÁS - BRASIL"
+                                    "${snapshot.data["name"]},GO-BRASIL"
                                         .toUpperCase(),
                                   );
                                 }
